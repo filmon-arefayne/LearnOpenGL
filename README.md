@@ -9,10 +9,10 @@ lib needed:
 
 
 coverage:
-[x] - Introduction
-[ ] - Getting Started
-[ ] - Lighting
-[ ] - Model Loading
-[ ] - Advanced OpenGL
-[ ] - Advanced Lighting
-[ ] - PBR
+- [x] Introduction
+- [ ] Getting Started
+- [ ] Lighting
+- [ ] Model Loading
+- [ ] Advanced OpenGL
+- [ ] Advanced Lighting
+- [ ] PBR
