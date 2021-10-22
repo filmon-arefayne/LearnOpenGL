@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+LearnOpenGL/glad.c
+LearnOpenGL/stb_image.h
