@@ -7,7 +7,7 @@ lib needed:
 - stb_image
 - glm
 
-
+## Progress Tracking
 coverage:
 - [x] Introduction
 - [ ] Getting Started
