@@ -8,12 +8,53 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-glm::vec3 cameraPos = glm::vec3{ 0.0f, 0.0f, 3.0f };
-glm::vec3 cameraFront = glm::vec3{ 0.0f, 0.0f, -1.0f };
-glm::vec3 cameraUp = glm::vec3{ 0.0f, 1.0f, 0.0f };
+glm::vec3 cameraPos{ 0.0f, 0.0f, 3.0f };
+glm::vec3 cameraFront{ 0.0f, 0.0f, -1.0f };
+glm::vec3 cameraUp{ 0.0f, 1.0f, 0.0f };
+
+float deltaTime{ 0.0f };
+float lastFrame{ 0.0f };
+
+float yaw{ -90.0f }, pitch{ 0.f };
+float lastX{ 400 }, lastY{ 300 };
+bool firstMouse{ true };
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+
+	if (firstMouse) {
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset{ (float) (xpos - lastX) };
+	float yoffset{ (float) (lastY - ypos) };
+
+	lastX = xpos;
+	lastY = ypos;
+
+	const float sensitivity{ 0.1f };
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront = glm::normalize(direction);
+
 }
 
 void processInput(GLFWwindow* window) {
@@ -21,7 +62,7 @@ void processInput(GLFWwindow* window) {
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	const float cameraSpeed = 0.05f;
+	const float cameraSpeed{ 2.5f * deltaTime };
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPos += cameraSpeed * cameraFront;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -33,8 +74,8 @@ void processInput(GLFWwindow* window) {
 }
 
 // constants
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH{ 800 };
+const unsigned int SCR_HEIGHT{ 600 };
 
 
 int main() {
@@ -59,6 +100,9 @@ int main() {
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(window, mouse_callback);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -203,6 +247,9 @@ int main() {
 	// render loop
 	// ----------- 
 	while (!glfwWindowShouldClose(window)) {
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 		processInput(window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -214,11 +261,6 @@ int main() {
 		shader.setInt("texture1", 0);
 		shader.setInt("texture2", 1);
 
-		
-
-		const float radius = 10.0f;
-		float camX = sin(glfwGetTime()) * radius;
-		float camZ = cos(glfwGetTime()) * radius;
 		glm::mat4 view;
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
