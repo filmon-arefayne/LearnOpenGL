@@ -1,7 +1,7 @@
 # LearnOpenGL
 
 
-lib needed:
+libs needed:
 - glfw
 - glad
 - stb_image
