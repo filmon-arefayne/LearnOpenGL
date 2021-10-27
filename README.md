@@ -10,7 +10,7 @@ lib needed:
 ## Progress Tracking
 coverage:
 - [x] Introduction
-- [ ] Getting Started
+- [x] Getting Started
 - [ ] Lighting
 - [ ] Model Loading
 - [ ] Advanced OpenGL
