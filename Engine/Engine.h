@@ -20,7 +20,7 @@ public:
 	float lastY;
 	float lastFrame;
 	float deltaTime;
-	std::vector<Texture> textures;
+	std::vector<unsigned int> textures;
 	unsigned int n_vertices;
 	unsigned int VBO, VAO;
 

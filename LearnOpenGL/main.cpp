@@ -8,7 +8,6 @@ int main() {
 
 	engine.SetShaders("vertex.glsl", "fragment.glsl");
 
-	
 	engine.LoadTextureFromImage("container.jpg");
 	engine.LoadTextureFromImage("awesomeface.png", true);	
 
@@ -79,7 +78,7 @@ int main() {
 		engine.ProcessInput();
 		engine.Clear(0.2f, 0.3f, 0.3f, 1.0f);
 
-		//engine.shader.use();
+		engine.shader.use();
 		engine.shader.setInt("texture1", 0);
 		engine.shader.setInt("texture2", 1);
 

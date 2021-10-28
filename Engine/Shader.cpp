@@ -70,8 +70,6 @@ void Shader::LoadShader(const char* vertexPath, const char* fragmentPath) {
 		glGetProgramInfoLog(ID, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
-	glUseProgram(ID);
-	std::cout << glGetError() << std::endl;
 	// delete the shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);

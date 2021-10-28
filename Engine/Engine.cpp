@@ -96,7 +96,7 @@ void Engine::SetBuffers(const float* verts, int length) {
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts)*length, verts, GL_STATIC_DRAW);
 
 
 	// position attribute
