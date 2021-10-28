@@ -363,6 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 
-LearnOpenGL/glad.c
-LearnOpenGL/stb_image.h
-LearnOpenGL/stb_image.cpp
+Engine/glad.c
+Engine/stb_image.h
+Engine/stb_image.cpp
