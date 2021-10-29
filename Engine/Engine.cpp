@@ -1,7 +1,7 @@
 #include "Engine.h"
 
 
-Engine::Engine() : camera(), firstMouse(true), deltaTime(0.0f), lastFrame(0.0f), lastX(camera.Position.x), lastY(camera.Position.y) {
+Engine::Engine() : camera(glm::vec3(0.0f,0.0f,3.0f)), firstMouse(true), deltaTime(0.0f), lastFrame(0.0f), lastX(camera.Position.x), lastY(camera.Position.y) {
 
 }
 
@@ -91,22 +91,9 @@ void Engine::LoadTextureFromImage(const char* imagePath, bool isPng) {
 	stbi_image_free(data);
 }
 
-void Engine::SetLightBuffers() {
-	glGenVertexArrays(1, &lightVAO);
-	glBindVertexArray(lightVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-}
-
-void Engine::SetBuffers(const float* verts, unsigned int length, bool texture_coordinates) {
-	if (texture_coordinates) {
-		n_vertices = length / 5;
-	}
-	else {
-		n_vertices = length / 3;
-	}
+void Engine::SetBuffersWithTexture(const float* verts, unsigned int length) {
+	n_vertices = length / 5;
+	
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 
@@ -115,25 +102,54 @@ void Engine::SetBuffers(const float* verts, unsigned int length, bool texture_co
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts)*length, verts, GL_STATIC_DRAW);
 	 
-	if (texture_coordinates) {
-		// position attribute
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
+	
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 
-		// texture attribute
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-	}
-	else {
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-	}
+	// texture attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 
 	// wireframe mode
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+}
+
+void Engine::SetBuffersWithNormal(const float* verts, unsigned int length) {
+	n_vertices = length / 6;
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * length, verts, GL_STATIC_DRAW);
+
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
+void Engine::SetLightBuffers() {
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 }
 
 void Engine::EnableTextures() {

@@ -69,7 +69,7 @@ int main() {
 	glm::vec3(1.5f,  0.2f, -1.5f),
 	glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
-	engine.SetBuffers(vertices, 180, true);
+	engine.SetBuffersWithTexture(vertices, 180);
 	
 	// render loop
 	// ----------- 

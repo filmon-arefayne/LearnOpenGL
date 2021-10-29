@@ -31,7 +31,8 @@ public:
 	void SetShaders(const char* vertexPath, const char* fragmentPath);
 	void SetLightShaders(const char* vertexPath, const char* fragmentPath);
 	void LoadTextureFromImage(const char* imagePath, bool isPng = false);
-	void SetBuffers(const float* verts, unsigned int length, bool texture_coordinates);
+	void SetBuffersWithTexture(const float* verts, unsigned int length);
+	void SetBuffersWithNormal(const float* verts, unsigned int length);
 	void SetLightBuffers();
 	void EnableTextures();
 	void BindVertexArray();
