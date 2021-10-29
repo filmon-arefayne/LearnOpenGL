@@ -57,6 +57,9 @@ int Engine::InitWindow() {
 void Engine::SetShaders(const char* vertexPath, const char* fragmentPath) {
 	shader.LoadShader(vertexPath, fragmentPath);
 }
+void Engine::SetLightShaders(const char* vertexPath, const char* fragmentPath) {
+	light_shader.LoadShader(vertexPath, fragmentPath);
+}
 
 void Engine::LoadTextureFromImage(const char* imagePath, bool isPng) {
 	textures.push_back(0);
@@ -88,8 +91,22 @@ void Engine::LoadTextureFromImage(const char* imagePath, bool isPng) {
 	stbi_image_free(data);
 }
 
-void Engine::SetBuffers(const float* verts, int length) {
-	n_vertices = length / 5;
+void Engine::SetLightBuffers() {
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+}
+
+void Engine::SetBuffers(const float* verts, unsigned int length, bool texture_coordinates) {
+	if (texture_coordinates) {
+		n_vertices = length / 5;
+	}
+	else {
+		n_vertices = length / 3;
+	}
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 
@@ -97,16 +114,20 @@ void Engine::SetBuffers(const float* verts, int length) {
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts)*length, verts, GL_STATIC_DRAW);
+	 
+	if (texture_coordinates) {
+		// position attribute
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
 
-
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// texture attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
+		// texture attribute
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+	}
+	else {
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
@@ -126,6 +147,10 @@ void Engine::EnableTextures() {
 
 void Engine::BindVertexArray() {
 	glBindVertexArray(VAO);
+}
+
+void Engine::BindLightVertexArray() {
+	glBindVertexArray(lightVAO);
 }
 
 void Engine::Draw() {
@@ -165,8 +190,6 @@ void Engine::Clear(float r, float g, float b, float a) {
 }
 
 void Engine::Swap() {
-	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		// -------------------------------------------------------------------------------
 	glfwSwapBuffers(window);
 }
 

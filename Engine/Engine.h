@@ -6,8 +6,8 @@
 #include "Texture.h"
 #include <vector>
 
-const unsigned int SCR_WIDTH{ 800 };
-const unsigned int SCR_HEIGHT{ 600 };
+const float SCR_WIDTH{ 800.0f };
+const float SCR_HEIGHT{ 600.0f };
 
 class Engine
 {
@@ -15,6 +15,7 @@ public:
 	GLFWwindow* window;
 	Camera camera;
 	Shader shader;
+	Shader light_shader;
 	bool firstMouse;
 	float lastX;
 	float lastY;
@@ -22,16 +23,19 @@ public:
 	float deltaTime;
 	std::vector<unsigned int> textures;
 	unsigned int n_vertices;
-	unsigned int VBO, VAO;
+	unsigned int VBO, VAO, lightVAO;
 
 	Engine();
 	~Engine();
 	int InitWindow();
 	void SetShaders(const char* vertexPath, const char* fragmentPath);
+	void SetLightShaders(const char* vertexPath, const char* fragmentPath);
 	void LoadTextureFromImage(const char* imagePath, bool isPng = false);
-	void SetBuffers(const float* verts, int length);
+	void SetBuffers(const float* verts, unsigned int length, bool texture_coordinates);
+	void SetLightBuffers();
 	void EnableTextures();
 	void BindVertexArray();
+	void BindLightVertexArray();
 	void Draw();
 	void ProcessInput();
 	bool ShouldClose();
