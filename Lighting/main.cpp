@@ -68,6 +68,7 @@ int main() {
         engine.shader.setVec3("objectColor", glm::vec3{ 1.0f, 0.5f, 0.31f });
         engine.shader.setVec3("lightColor", glm::vec3{1.0f, 1.0f, 1.0f});
         engine.shader.setVec3("lightPos", lightPos);
+        engine.shader.setVec3("viewPos", engine.camera.Position);
 
 		glm::mat4 view = engine.camera.GetViewMatrix();
 
@@ -91,7 +92,6 @@ int main() {
 		engine.light_shader.setMat4("model", model);
 		engine.light_shader.setMat4("view", view);
 		engine.light_shader.setMat4("projection", projection);
-        engine.light_shader.setVec3("lightPos", lightPos);
 		engine.BindLightVertexArray();
 		engine.Draw();
 
